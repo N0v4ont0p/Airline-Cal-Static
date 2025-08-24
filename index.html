@@ -59,52 +59,6 @@
         body {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            cursor: none;
-            overflow-x: hidden;
-        }
-        
-        /* Custom cursor */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #007aff;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
-        }
-        
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(0, 122, 255, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease;
-        }
-        
-        body:hover .cursor-dot {
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        
-        body:hover .cursor-outline {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        a:hover ~ .cursor-dot {
-            transform: translate(-50%, -50%) scale(1.5);
-            background-color: #ff2d55;
-        }
-        
-        a:hover ~ .cursor-outline {
-            transform: translate(-50%, -50%) scale(1.3);
-            border-color: #ff2d55;
-            border-width: 1px;
         }
         
         /* Enhanced glass card effect */
@@ -259,30 +213,18 @@
             opacity: 0.15;
             filter: blur(40px);
             z-index: -1;
-            transition: transform 0.1s linear;
         }
         
-        /* Mouse follower elements */
-        .mouse-follower {
-            position: fixed;
-            border-radius: 50%;
-            background: linear-gradient(45deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
-            z-index: -1;
-            transition: transform 0.5s ease-out;
-            pointer-events: none;
+        /* Logo styling */
+        .logo {
+            transition: all 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body class="bg-appleGray-50 dark:bg-dark-900 text-appleGray-900 dark:text-appleGray-100 font-sans min-h-screen transition-colors duration-500">
-    <!-- Custom cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-    
-    <!-- Mouse follower elements -->
-    <div class="mouse-follower w-64 h-64 opacity-10"></div>
-    <div class="mouse-follower w-32 h-32 opacity-5"></div>
-    <div class="mouse-follower w-16 h-16 opacity-15"></div>
-
     <!-- Decorative background elements -->
     <div class="decorative-circle w-80 h-80 bg-primary -top-40 -left-40 animate-float"></div>
     <div class="decorative-circle w-96 h-96 bg-secondary top-1/2 -right-40 animate-float delay-300" style="animation-duration: 8s;"></div>
@@ -292,7 +234,7 @@
     <nav class="navbar fixed w-full z-50 py-4 px-6 sm:px-8 lg:px-12">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <a href="#" class="text-xl font-semibold flex items-center">
-                <span class="text-primary mr-2"><i class="fa-solid fa-route"></i></span>
+                <img src="favicon.ico" alt="SkyMiles Calculator Logo" class="logo w-8 h-8 mr-2">
                 <span>SkyMiles Calculator</span>
             </a>
             <div class="hidden md:flex space-x-8">
@@ -572,10 +514,8 @@
             <div class="max-w-4xl mx-auto border-t border-appleGray-200 dark:border-appleGray-800 pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8">
                     <div class="flex items-center mb-4 md:mb-0">
-                        <span class="text-xl font-semibold flex items-center">
-                            <span class="text-primary mr-2"><i class="fa-solid fa-route"></i></span>
-                            SkyMiles Calculator
-                        </span>
+                        <img src="favicon.ico" alt="SkyMiles Calculator Logo" class="logo w-6 h-6 mr-2">
+                        <span class="text-xl font-semibold">SkyMiles Calculator</span>
                     </div>
                     <div class="flex space-x-6">
                         <a href="#" class="hover:text-primary transition-colors duration-300"><i class="fa-brands fa-twitter"></i></a>
@@ -605,40 +545,6 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
-
-        // Custom cursor
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-            
-            cursorOutline.style.left = e.clientX + 'px';
-            cursorOutline.style.top = e.clientY + 'px';
-        });
-
-        // Mouse follower elements
-        const followers = document.querySelectorAll('.mouse-follower');
-        
-        document.addEventListener('mousemove', (e) => {
-            followers.forEach((follower, index) => {
-                // Add delay based on index
-                setTimeout(() => {
-                    follower.style.left = (e.clientX - (follower.offsetWidth / 2)) + 'px';
-                    follower.style.top = (e.clientY - (follower.offsetHeight / 2)) + 'px';
-                }, index * 100);
-            });
-            
-            // Move decorative circles slightly with mouse
-            const circles = document.querySelectorAll('.decorative-circle');
-            circles.forEach((circle, index) => {
-                const moveX = (e.clientX / window.innerWidth - 0.5) * 20;
-                const moveY = (e.clientY / window.innerHeight - 0.5) * 20;
-                
-                circle.style.transform = `translate(${moveX}px, ${moveY}px)`;
-            });
-        });
 
         // Stats counter animation
         const statElements = document.querySelectorAll('.stat-number');

@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airline Miles Calculator | Optimize Your Travel Rewards</title>
     
-    <!-- Favicon links for all browsers -->
+    <!-- Comprehensive favicon solution -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="favicon.ico">
+    <!-- For iOS devices -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico">
+    <!-- For modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -57,13 +61,21 @@
         }
     </script>
     <style>
-        html {
+        html, body {
             scroll-behavior: smooth;
             scroll-padding-top: 80px;
+            overflow-x: hidden;
         }
         body {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Force scroll to top */
+        html {
+            scroll-behavior: auto;
         }
         
         /* Enhanced glass card effect */
@@ -203,7 +215,7 @@
             background: rgba(100, 100, 255, 0.3);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 122, 255, 0.5);
+            background: rgba(0, 122, 255, 极
         }
         
         /* Stats counter */
@@ -424,7 +436,7 @@
                                 <span>Export results to CSV</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fa-solid fa-check-circle text-primary mr-2 mt-1"></i>
+                                <i class="fa-solid fa-check-circle text-primary mr-2 mt-极
                                 <span>Multi-device synchronization</span>
                             </li>
                         </ul>
@@ -436,11 +448,11 @@
                     <h2 class="text-3xl sm:text-4xl font-semibold text-center mb-12">How It Works</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="text-center">
-                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
+                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-极 feature-icon">
                                 <span class="text-primary font-bold text-2xl">1</span>
                             </div>
                             <h3 class="text-xl font-medium mb-3">Enter Your Route</h3>
-                            <p class="text-appleGray-600 dark:text-appleGray-400">Select departure and arrival airports from our extensive database</p>
+                            <极 class="text-appleGray-600 dark:text-appleGray-400">Select departure and arrival airports from our extensive database</p>
                         </div>
                         <div class="text-center">
                             <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
@@ -471,7 +483,7 @@
                 <!-- Benefits Section -->
                 <div id="benefits" class="glass-card rounded-3xl p-10 sm:p-12 mb-16 animate-scale-in delay-500">
                     <h2 class="text-3xl sm:text-4xl font-semibold text-center mb-12">Why Travelers Love Our Calculator</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <极 class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="text-center">
                             <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
                                 <i class="fa-solid fa-wand-magic-sparkles text-primary text-2xl"></i>
@@ -480,7 +492,7 @@
                             <p class="text-appleGray-600 dark:text-appleGray-400">Our algorithm finds the best program for each route, maximizing your rewards</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
+                            <div class="w-极 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
                                 <i class="fa-solid fa-gauge-high text-primary text-2xl"></i>
                             </div>
                             <h3 class="text-xl font-medium mb-3">Lightning Fast</h3>
@@ -488,9 +500,9 @@
                         </div>
                         <div class="text-center">
                             <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6 feature-icon">
-                                <i class="fa-solid fa-shield-heart text-primary text-2xl"></i>
+                                <i class="极 fa-shield-heart text-primary text-2xl"></i>
                             </div>
-                            <h3 class="text-xl font-medium mb-3">Privacy First</h3>
+                            <h3 class="text-xl font-medium mb-3">Privacy First</极>
                             <p class="text-appleGray-600 dark:text-appleGray-400">Your data stays on your device - we don't track or store your searches</p>
                         </div>
                     </div>
@@ -499,7 +511,7 @@
                 <!-- Final CTA -->
                 <div class="text-center mb-16 animate-fade-in delay-700">
                     <h3 class="text-2xl sm:text-3xl font-medium mb-8">Ready to optimize your travel rewards?</h3>
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <div class="flex flex-col sm:极-row justify-center gap-4">
                         <a href="https://airline-calculator-ak5m.onrender.com" class="inline-flex items-center justify-center bg-primary hover:bg-blue-600 text-white font-medium rounded-full px-10 py-4 text-lg tracking-wide btn-hover transform transition-transform duration-300">
                             <i class="fa-solid fa-bolt mr-3"></i> Launch Calculator Now
                         </a>
@@ -525,7 +537,7 @@
                     <div class="flex space-x-6">
                         <a href="#" class="hover:text-primary transition-colors duration-300"><i class="fa-brands fa-twitter"></i></a>
                         <a href="#" class="hover:text-primary transition-colors duration-300"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="hover:text-primary transition-colors duration-300"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="hover:text-primary transition-colors duration-300"><极 class="fa-brands fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <p>Created by George</p>
@@ -536,19 +548,35 @@
 
     <!-- Theme toggle and animations script -->
     <script>
-        // Force scroll to top on page load and reload
-        window.onload = function() {
+        // Force scroll to top on page load
+        window.addEventListener('load', function() {
+            // First try with setTimeout
             setTimeout(function() {
                 window.scrollTo(0, 0);
             }, 0);
-        };
+            
+            // Additional safety check
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+            }, 10);
+        });
         
         // Also handle back/forward navigation
-        window.onpageshow = function(event) {
+        window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
-                window.scrollTo(0, 0);
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                }, 0);
             }
-        };
+        });
+        
+        // Force scroll on DOMContentLoaded as well
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 0);
+        });
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('theme-toggle');

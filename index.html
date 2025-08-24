@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Airlines Calculator — Apple‑style</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.14);
+      --text: #eef2f7;
+      --muted: #b9c0cc;
+      --accent: #8ab4ff;
+      --ok: #8be28b;
+      --warn:#ffd27a;
+      --card-blur: 16px;
+      --radius: 20px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 10%, #0f1320 0%, #0b0c10 40%, #0a0a0a 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    .app{display:grid; grid-template-columns: 380px 1fr; grid-template-rows: 72px 1fr; height:100vh; gap:16px; padding:16px}
+    header{
+      grid-column: 1 / -1; display:flex; align-items:center; justify-content:space-between;
+      backdrop-filter: blur(var(--card-blur)); background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
+      padding: 12px 16px; box-shadow: var(--shadow);
+    }
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{width:36px; height:36px; border-radius:12px; background: linear-gradient(135deg, #111318, #1b2030); position:relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06)}
+    .logo:after{content:""; position:absolute; inset:-30% -30% auto auto; width:120%; height:120%; background: radial-gradient(120px 80px at 60% 0%, rgba(255,255,255,0.25), transparent 55%)}
+    h1{font-size:18px; margin:0; letter-spacing:.4px}
+    .controls{
+      backdrop-filter: blur(var(--card-blur)); background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 16px; display:flex; flex-direction:column; gap:14px;
+    }
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    .row3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px}
+    label{font-size:12px; color: var(--muted); margin-bottom:6px; display:block}
+    select, input{
+      width:100%; background: var(--panel-strong); color:var(--text);
+      border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); padding:10px 12px;
+      outline:none; transition: transform .15s ease, background .2s ease, border .2s ease;
+    }
+    select:hover, input:hover{transform: translateY(-1px)}
+    button{cursor:pointer}
+    .btn{background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.12);
+      border-radius: 14px; padding:10px 12px; color:var(--text); box-shadow: var(--shadow); transition: transform .15s ease}
+    .btn:hover{transform: translateY(-1px) scale(1.01)}
+    .map{position:relative; backdrop-filter: blur(var(--card-blur)); background: var(--panel); border:1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden}
+    #map{height:100%; min-height: 520px}
+    .right{display:grid; grid-template-rows: 1fr auto; gap:16px}
+    .cards{display:grid; grid-template-columns: repeat(4, 1fr); gap:12px;}
+    .card{backdrop-filter: blur(var(--card-blur)); background: var(--panel); border:1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding:14px; box-shadow: var(--shadow)}
+    .big{grid-column: span 2}
+    .kpi{font-size:28px; font-weight:700}
+    .muted{color:var(--muted); font-size:12px}
+    .pill{display:inline-block; padding:4px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); font-size:12px}
+    .list{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+    .footer{display:flex; gap:12px; align-items:center; justify-content:space-between}
+    .bookmarks{display:flex; gap:8px; flex-wrap:wrap}
+    .bookmark{padding:6px 10px; border-radius:12px; border:1px dashed rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); font-size:12px}
+    .hint{font-size:12px; color:var(--muted)}
+    .divider{height:1px; background: rgba(255,255,255,0.08); margin:8px 0}
+    .badge{font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,0.14)}
+    @media (max-width: 1100px){
+      .app{grid-template-columns:1fr; grid-template-rows: auto auto 1fr; height:auto}
+      .right{grid-template-rows:auto auto}
+      #map{min-height:420px}
+      .cards{grid-template-columns: repeat(2, 1fr)}
+      .big{grid-column: span 2}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Airlines Calculator</h1>
+          <div class="hint">Apple‑style, frosted glass, live route & miles comparison</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="saveBookmark" class="btn">★ Save Route</button>
+      </div>
+    </header>
+
+    <aside class="controls">
+      <div class="row">
+        <div>
+          <label for="origin">Origin (IATA)</label>
+          <select id="origin"></select>
+        </div>
+        <div>
+          <label for="destination">Destination (IATA)</label>
+          <select id="destination"></select>
+        </div>
+      </div>
+      <div class="row3">
+        <div>
+          <label for="alliance">Alliance</label>
+          <select id="alliance"></select>
+        </div>
+        <div>
+          <label for="airline">Airline</label>
+          <select id="airline"></select>
+        </div>
+        <div>
+          <label for="program">Loyalty Program</label>
+          <select id="program"></select>
+        </div>
+      </div>
+      <div class="row3">
+        <div>
+          <label for="fare">Fare Class</label>
+          <select id="fare">
+            <option>Economy</option>
+            <option>Premium</option>
+            <option selected>Business</option>
+            <option>First</option>
+          </select>
+        </div>
+        <div>
+          <label for="search">Quick Search (airline/program)</label>
+          <input id="search" type="search" placeholder="Type to filter…"/>
+        </div>
+        <div style="display:flex; align-items:flex-end; gap:8px">
+          <button id="swap" class="btn" title="Swap origin/destination">⇄ Swap</button>
+          <button id="reset" class="btn" title="Reset">Reset</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="bookmarks" id="bookmarks"></div>
+    </aside>
+
+    <section class="map">
+      <div id="map"></div>
+    </section>
+
+    <section class="right">
+      <div class="cards">
+        <div class="card big">
+          <div class="muted">Selected Program Miles</div>
+          <div class="kpi" id="selectedMiles">—</div>
+          <div class="hint" id="selectedExplain">Choose a route and program</div>
+        </div>
+        <div class="card">
+          <div class="muted">Comparator #1</div>
+          <div class="kpi" id="cmp1">—</div>
+          <div class="hint" id="cmp1n">—</div>
+        </div>
+        <div class="card">
+          <div class="muted">Comparator #2</div>
+          <div class="kpi" id="cmp2">—</div>
+          <div class="hint" id="cmp2n">—</div>
+        </div>
+        <div class="card">
+          <div class="muted">Comparator #3</div>
+          <div class="kpi" id="cmp3">—</div>
+          <div class="hint" id="cmp3n">—</div>
+        </div>
+        <div class="card big">
+          <div class="muted">Eligible Earning & Partners</div>
+          <div class="list" id="eligibleList"></div>
+        </div>
+        <div class="card big">
+          <div class="muted">Redeemable Partners</div>
+          <div class="list" id="redeemList"></div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="hint">Distances use great‑circle approximation. Replace datasets with live sources when ready.</span>
+        <span class="badge" id="distanceBadge">—</span>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    // ---------- Minimal datasets (extend freely or swap with API later) ----------
+    const AIRPORTS = {
+      PVG: { name: "Shanghai Pudong", iata: "PVG", coords: [31.1434, 121.7999] },
+      HKG: { name: "Hong Kong", iata: "HKG", coords: [22.3080, 113.9185] },
+      SIN: { name: "Singapore Changi", iata: "SIN", coords: [1.3644, 103.9894] },
+      LAX: { name: "Los Angeles", iata: "LAX", coords: [33.9416, -118.4085] },
+      JFK: { name: "New York JFK", iata: "JFK", coords: [40.6413, -73.7781] },
+      CDG: { name: "Paris CDG", iata: "CDG", coords: [49.0097, 2.55] },
+    };
+
+    const DATA = {
+      SkyTeam: {
+        airlines: ["China Eastern", "China Southern", "Air France", "KLM", "Delta", "Korean Air", "China Airlines"],
+        programs: {
+          "Flying Blue": {
+            airlinesEarn: ["Air France", "KLM", "China Eastern", "China Southern", "Delta", "Korean Air", "China Airlines"],
+            airlinesRedeem: ["Air France", "KLM", "China Eastern", "China Southern", "Delta", "Korean Air", "China Airlines"],
+            bonus: 1.0,
+          },
+          "Delta SkyMiles": {
+            airlinesEarn: ["Delta", "KLM", "Air France", "Korean Air", "China Eastern"],
+            airlinesRedeem: ["Delta", "KLM", "Air France", "Korean Air", "China Eastern"],
+            bonus: 0.95,
+          },
+          "Korean Air SKYPASS": {
+            airlinesEarn: ["Korean Air", "Delta", "KLM", "Air France"],
+            airlinesRedeem: ["Korean Air", "Delta", "KLM", "Air France"],
+            bonus: 1.05,
+          },
+          "China Airlines Dynasty": {
+            airlinesEarn: ["China Airlines", "Delta", "KLM", "Air France"],
+            airlinesRedeem: ["China Airlines", "Delta", "KLM", "Air France"],
+            bonus: 1.0,
+          },
+        }
+      },
+      Oneworld: {
+        airlines: ["American", "Cathay Pacific", "JAL", "Qantas", "British Airways"],
+        programs: {
+          "AAdvantage": {
+            airlinesEarn: ["American", "Cathay Pacific", "JAL", "Qantas", "British Airways"],
+            airlinesRedeem: ["American", "Cathay Pacific", "JAL", "Qantas", "British Airways"],
+            bonus: 1.0,
+          },
+          "Cathay": { airlinesEarn: ["Cathay Pacific", "JAL", "Qantas", "BA", "American"], airlinesRedeem: ["Cathay Pacific", "JAL", "Qantas", "BA", "American"], bonus: 0.9 },
+          "Qantas Frequent Flyer": { airlinesEarn: ["Qantas", "BA", "JAL", "Cathay", "American"], airlinesRedeem: ["Qantas", "BA", "JAL", "Cathay", "American"], bonus: 0.95 },
+          "BA Executive Club": { airlinesEarn: ["BA", "American", "Qantas", "JAL", "Cathay"], airlinesRedeem: ["BA", "American", "Qantas", "JAL", "Cathay"], bonus: 1.0 },
+        }
+      },
+      Star: {
+        airlines: ["United", "Air China", "Singapore", "Turkish", "Thai", "Asiana"],
+        programs: {
+          "MileagePlus": { airlinesEarn: ["United", "Air China", "Singapore", "Turkish", "Thai", "Asiana"], airlinesRedeem: ["United", "Air China", "Singapore", "Turkish", "Thai", "Asiana"], bonus: 1.0 },
+          "KrisFlyer": { airlinesEarn: ["Singapore", "United", "Turkish", "Thai", "Air China", "Asiana"], airlinesRedeem: ["Singapore", "United", "Turkish", "Thai", "Air China", "Asiana"], bonus: 1.0 },
+          "Turkish Miles&Smiles": { airlinesEarn: ["Turkish", "United", "Singapore", "Thai", "Air China"], airlinesRedeem: ["Turkish", "United", "Singapore", "Thai", "Air China"], bonus: 1.0 },
+        }
+      }
+    };
+
+    const FARE_MULT = { Economy:1.0, Premium:1.25, Business:1.5, First:2.0 };
+
+    // ---------- UI elements ----------
+    const elOrigin = document.getElementById('origin');
+    const elDest = document.getElementById('destination');
+    const elAlliance = document.getElementById('alliance');
+    const elAirline = document.getElementById('airline');
+    const elProgram = document.getElementById('program');
+    const elFare = document.getElementById('fare');
+    const elSearch = document.getElementById('search');
+
+    const selectedMiles = document.getElementById('selectedMiles');
+    const selectedExplain = document.getElementById('selectedExplain');
+    const cmpEls = [
+      {m: document.getElementById('cmp1'), n: document.getElementById('cmp1n')},
+      {m: document.getElementById('cmp2'), n: document.getElementById('cmp2n')},
+      {m: document.getElementById('cmp3'), n: document.getElementById('cmp3n')},
+    ];
+    const eligibleList = document.getElementById('eligibleList');
+    const redeemList = document.getElementById('redeemList');
+    const distanceBadge = document.getElementById('distanceBadge');
+
+    const btnSwap = document.getElementById('swap');
+    const btnReset = document.getElementById('reset');
+    const btnSave = document.getElementById('saveBookmark');
+    const bookmarksWrap = document.getElementById('bookmarks');
+
+    // ---------- Map ----------
+    const map = L.map('map', { zoomControl: false });
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 6, minZoom: 2, attribution: '&copy; OpenStreetMap', opacity: 0.7
+    }).addTo(map);
+    let routeLine = null; let markers = [];
+
+    // ---------- Helpers ----------
+    function populateAirports(sel){
+      sel.innerHTML = Object.values(AIRPORTS).map(a => `<option value="${a.iata}">${a.iata} — ${a.name}</option>`).join('');
+    }
+    function populateAlliances(){
+      elAlliance.innerHTML = Object.keys(DATA).map(k => `<option>${k}</option>`).join('');
+    }
+    function populatePrograms(){
+      const progs = Object.keys(DATA[elAlliance.value].programs);
+      elProgram.innerHTML = progs.map(p => `<option>${p}</option>`).join('');
+    }
+    function populateAirlines(){
+      const arr = DATA[elAlliance.value].airlines;
+      elAirline.innerHTML = arr.map(a => `<option>${a}</option>`).join('');
+    }
+
+    function toRad(d){ return d * Math.PI / 180; }
+    function haversineMiles(a, b){
+      const [lat1, lon1] = a, [lat2, lon2] = b;
+      const R = 6371; // km
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const A = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+      const c = 2 * Math.atan2(Math.sqrt(A), Math.sqrt(1-A));
+      return (R * c) * 0.621371; // miles
+    }
+
+    function drawRoute(){
+      const a = AIRPORTS[elOrigin.value].coords;
+      const b = AIRPORTS[elDest.value].coords;
+      const dist = Math.round(haversineMiles(a, b));
+      distanceBadge.textContent = `${elOrigin.value} → ${elDest.value} · ${dist.toLocaleString()} mi`;
+
+      // markers
+      markers.forEach(m => map.removeLayer(m));
+      markers = [
+        L.circleMarker(a, {radius:6, weight:2, color:'#8ab4ff', fillColor:'#8ab4ff', fillOpacity:.85}).bindTooltip(elOrigin.value),
+        L.circleMarker(b, {radius:6, weight:2, color:'#8ab4ff', fillColor:'#8ab4ff', fillOpacity:.85}).bindTooltip(elDest.value)
+      ];
+      markers.forEach(m => m.addTo(map));
+
+      // line
+      if(routeLine) map.removeLayer(routeLine);
+      routeLine = L.polyline([a,b], {weight:3, opacity:.9});
+      routeLine.addTo(map);
+
+      const bounds = L.latLngBounds([a,b]).pad(0.4);
+      map.fitBounds(bounds, { animate: true, duration: .6 });
+      return dist;
+    }
+
+    function threeComparators(program){
+      const list = Object.keys(DATA[elAlliance.value].programs).filter(p => p !== program);
+      return list.slice(0,3);
+    }
+
+    function calcMiles(programName, distance){
+      const fareMult = FARE_MULT[elFare.value] || 1;
+      const bonus = DATA[elAlliance.value].programs[programName]?.bonus || 1;
+      return Math.round(distance * fareMult * bonus);
+    }
+
+    function updateCards(){
+      const dist = drawRoute();
+      const prog = elProgram.value;
+      const selected = calcMiles(prog, dist);
+      selectedMiles.textContent = selected.toLocaleString();
+      selectedExplain.textContent = `${prog} · ${elFare.value} · est.`;
+
+      const comps = threeComparators(prog);
+      comps.forEach((p, i) => {
+        const m = calcMiles(p, dist);
+        cmpEls[i].m.textContent = m.toLocaleString();
+        cmpEls[i].n.textContent = p;
+      });
+      for(let i=comps.length;i<3;i++){ cmpEls[i].m.textContent='—'; cmpEls[i].n.textContent='—'; }
+
+      const pData = DATA[elAlliance.value].programs[prog];
+      renderList(eligibleList, pData.airlinesEarn);
+      renderList(redeemList, pData.airlinesRedeem);
+    }
+
+    function renderList(root, items){
+      root.innerHTML = items.map(x => `<span class="pill">${x}</span>`).join('');
+    }
+
+    function saveBookmark(){
+      const key = `${elOrigin.value}-${elDest.value}-${elAlliance.value}-${elProgram.value}-${elFare.value}`;
+      const label = `${elOrigin.value}→${elDest.value} · ${elProgram.value} (${elFare.value})`;
+      const list = JSON.parse(localStorage.getItem('bookmarks')||'[]');
+      if (!list.find(i => i.key===key)){
+        list.push({ key, label, o: elOrigin.value, d: elDest.value, a: elAlliance.value, p: elProgram.value, f: elFare.value });
+        localStorage.setItem('bookmarks', JSON.stringify(list));
+        renderBookmarks();
+      }
+    }
+
+    function renderBookmarks(){
+      const list = JSON.parse(localStorage.getItem('bookmarks')||'[]');
+      bookmarksWrap.innerHTML = list.map(i => `
+        <span class="bookmark" data-key="${i.key}">${i.label} ✕</span>
+      `).join('');
+      [...bookmarksWrap.children].forEach(el => {
+        el.addEventListener('click', () => {
+          const key = el.dataset.key;
+          const list = JSON.parse(localStorage.getItem('bookmarks')||'[]');
+          const item = list.find(x => x.key===key);
+          if (!item) return;
+          // Apply
+          elOrigin.value = item.o;
+          elDest.value = item.d;
+          elAlliance.value = item.a;
+          populatePrograms();
+          populateAirlines();
+          elProgram.value = item.p;
+          elFare.value = item.f;
+          updateCards();
+        });
+      });
+    }
+
+    function resetAll(){
+      elOrigin.value = 'PVG';
+      elDest.value = 'HKG';
+      elAlliance.value = 'SkyTeam';
+      populatePrograms();
+      populateAirlines();
+      elProgram.value = 'Flying Blue';
+      elFare.value = 'Business';
+      updateCards();
+    }
+
+    // ---------- Init ----------
+    populateAirports(elOrigin); populateAirports(elDest);
+    populateAlliances(); populatePrograms(); populateAirlines();
+    resetAll();
+
+    // ---------- Events ----------
+    [elOrigin, elDest, elAlliance, elProgram, elFare].forEach(el => el.addEventListener('change', () => {
+      if (el === elAlliance){ populatePrograms(); populateAirlines(); }
+      updateCards();
+    }));
+    btnSwap.addEventListener('click', () => { const tmp = elOrigin.value; elOrigin.value = elDest.value; elDest.value = tmp; updateCards(); });
+    btnReset.addEventListener('click', resetAll);
+    btnSave.addEventListener('click', saveBookmark);
+
+    elSearch.addEventListener('input', () => {
+      const q = elSearch.value.toLowerCase().trim();
+      // Filter programs by name
+      const progs = Object.keys(DATA[elAlliance.value].programs).filter(p => p.toLowerCase().includes(q));
+      if (progs.length){ elProgram.innerHTML = progs.map(p=>`<option>${p}</option>`).join(''); }
+      else populatePrograms();
+    });
+
+    renderBookmarks();
+  </script>
+</body>
+</html>

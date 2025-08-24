@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airline Miles Calculator Guide</title>
+    <title>Airline Miles Calculator | Optimize Your Travel Rewards</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -13,6 +14,18 @@
                 extend: {
                     colors: {
                         primary: '#007aff',
+                        appleGray: {
+                            50: '#f5f5f7',
+                            100: '#e8e8ed',
+                            200: '#d2d2d7',
+                            300: '#c2c2c8',
+                            400: '#a2a2a8',
+                            500: '#86868b',
+                            600: '#69696d',
+                            700: '#515154',
+                            800: '#3a3a3c',
+                            900: '#1d1d1f',
+                        },
                         dark: {
                             900: '#121212',
                             800: '#1e1e1e',
@@ -24,6 +37,11 @@
                     },
                     backdropBlur: {
                         xs: '2px',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'scale-in': 'scaleIn 0.6s ease-out forwards',
                     }
                 }
             }
@@ -37,200 +55,293 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+        
+        /* Enhanced glass card effect */
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.075);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
         }
         .dark .glass-card {
-            background: rgba(15, 15, 15, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(25, 25, 25, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .dark .glass-card:hover {
+            background: rgba(35, 35, 35, 0.8);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Apple-like gradients */
         .hero-gradient {
             background: linear-gradient(135deg, rgba(0,122,255,0.08) 0%, rgba(0,122,255,0) 70%);
         }
         .dark .hero-gradient {
             background: linear-gradient(135deg, rgba(0,122,255,0.05) 0%, rgba(0,0,0,0) 70%);
         }
+        
+        /* Enhanced animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
         .animate-fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+        
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* Apple-style buttons */
         .btn-hover {
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
         }
         .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.25);
+        }
+        
+        /* Apple-like navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Subtle parallax effect */
+        .parallax-element {
+            transition: transform 0.3s ease-out;
+        }
+        
+        /* Text highlight effect */
+        .text-highlight {
+            position: relative;
+            display: inline-block;
+        }
+        .text-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: rgba(0, 122, 255, 0.15);
+            z-index: -1;
+            transition: height 0.3s ease;
+        }
+        .text-highlight:hover::after {
+            height: 40%;
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
-    <div class="min-h-screen flex flex-col">
+<body class="bg-appleGray-50 dark:bg-dark-900 text-appleGray-900 dark:text-appleGray-100 font-sans min-h-screen transition-colors duration-500">
+    <!-- Apple-like navbar -->
+    <nav class="navbar fixed w-full z-50 py-4 px-6 sm:px-8 lg:px-12">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl font-semibold flex items-center">
+                <span class="text-primary mr-1"><i class="fa-solid fa-plane"></i></span>
+                <span>Airline Miles</span>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="text-sm hover:text-primary transition-colors">Features</a>
+                <a href="#how-it-works" class="text-sm hover:text-primary transition-colors">How It Works</a>
+                <a href="https://airline-calculator-ak5m.onrender.com" class="text-sm text-primary hover:opacity-80 transition-colors">Calculator</a>
+            </div>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-appleGray-200 dark:hover:bg-appleGray-800 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex flex-col pt-16">
         <!-- Header -->
-        <header class="py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl sm:text-5xl font-bold text-center mb-3 tracking-tight">Airline Miles</h1>
-                <div class="h-px w-24 mx-auto bg-gray-200 dark:bg-gray-700 mb-4"></div>
-                <p class="text-lg sm:text-xl text-center text-gray-500 dark:text-gray-400 font-light tracking-wide">Optimize your travel rewards</p>
+        <header class="py-20 px-4 sm:px-6 lg:px-8 animate-slide-up">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl sm:text-6xl font-bold mb-5 tracking-tight">Airline Miles <span class="text-highlight">Calculator</span></h1>
+                <div class="h-px w-24 mx-auto bg-appleGray-300 dark:bg-appleGray-700 mb-6"></div>
+                <p class="text-xl sm:text-2xl text-appleGray-500 dark:text-appleGray-400 font-light max-w-2xl mx-auto tracking-wide">
+                    Optimize your travel rewards with precision
+                </p>
             </div>
         </header>
 
         <!-- Main Content -->
         <main class="flex-grow px-4 sm:px-6 lg:px-8 py-8">
-            <div class="max-w-4xl mx-auto">
+            <div class="max-w-6xl mx-auto">
                 <!-- Hero Section -->
-                <div class="glass-card rounded-3xl p-8 sm:p-10 mb-12 hero-gradient">
-                    <div class="text-center">
-                        <h2 class="text-2xl sm:text-3xl font-semibold mb-6">Smart Way to Track Your Travel Rewards</h2>
-                        <p class="text-lg sm:text-xl mb-8 text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-                            Our calculator helps you compare miles earned across different airlines and loyalty programs. 
-                            Easily calculate miles between airports and optimize your travel strategy.
+                <div class="glass-card rounded-3xl p-10 sm:p-12 mb-16 hero-gradient overflow-hidden animate-scale-in">
+                    <div class="text-center relative">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary rounded-full opacity-5 blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-primary rounded-full opacity-5 blur-3xl"></div>
+                        
+                        <h2 class="text-3xl sm:text-4xl font-semibold mb-8">Smart Way to Track Your Travel Rewards</h2>
+                        <p class="text-xl mb-10 text-appleGray-600 dark:text-appleGray-300 max-w-3xl mx-auto leading-relaxed">
+                            Our advanced calculator helps you compare miles earned across different airlines and loyalty programs. 
+                            Precisely calculate miles between airports and optimize your travel strategy.
                         </p>
-                        <a href="https://airline-calculator-ak5m.onrender.com" class="inline-block bg-primary hover:bg-blue-600 text-white font-medium rounded-full px-8 py-3.5 text-lg tracking-wide btn-hover shadow-lg">
-                            Open Calculator
+                        <a href="https://airline-calculator-ak5m.onrender.com" class="inline-block bg-primary hover:bg-blue-600 text-white font-medium rounded-full px-10 py-4 text-lg tracking-wide btn-hover shadow-lg transform transition-transform duration-300">
+                            Open Calculator <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Features Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-                    <div class="glass-card rounded-2xl p-6 animate-fade-in delay-100">
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
+                <div id="features" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+                    <div class="glass-card rounded-2xl p-7 animate-slide-up delay-100 parallax-element">
+                        <div class="flex items-center mb-5">
+                            <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center mr-5">
+                                <i class="fa-solid fa-chart-line text-primary text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-semibold">Compare Programs</h3>
+                            <h3 class="text-2xl font-semibold">Compare Programs</h3>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-appleGray-600 dark:text-appleGray-400 leading-relaxed">
                             See how different airline loyalty programs stack up against each other for your specific routes.
                         </p>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
+                    <div class="glass-card rounded-2xl p-7 animate-slide-up delay-200 parallax-element">
+                        <div class="flex items-center mb-5">
+                            <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center mr-5">
+                                <i class="fa-solid fa-calculator text-primary text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-semibold">Accurate Calculations</h3>
+                            <h3 class="text-2xl font-semibold">Accurate Calculations</h3>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-appleGray-600 dark:text-appleGray-400 leading-relaxed">
                             Get precise mileage calculations between any airports worldwide with our up-to-date database.
                         </p>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                </svg>
+                    <div class="glass-card rounded-2xl p-7 animate-slide-up delay-300 parallax-element">
+                        <div class="flex items-center mb-5">
+                            <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center mr-5">
+                                <i class="fa-solid fa-medal text-primary text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-semibold">Reward Optimization</h3>
+                            <h3 class="text-2xl font-semibold">Reward Optimization</h3>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-appleGray-600 dark:text-appleGray-400 leading-relaxed">
                             Discover which credit cards and partnerships will maximize your miles for each trip.
                         </p>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <div class="glass-card rounded-2xl p-7 animate-slide-up delay-400 parallax-element">
+                        <div class="flex items-center mb-5">
+                            <div class="w-12 h-12 rounded-xl bg-primary bg-opacity-10 flex items-center justify-center mr-5">
+                                <i class="fa-solid fa-clock text-primary text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-semibold">Time Savings</h3>
+                            <h3 class="text-2xl font-semibold">Time Savings</h3>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-appleGray-600 dark:text-appleGray-400 leading-relaxed">
                             Stop wasting time with manual calculations - get instant results with our streamlined tool.
                         </p>
                     </div>
                 </div>
 
                 <!-- How It Works -->
-                <div class="glass-card rounded-3xl p-8 sm:p-10 mb-12">
-                    <h2 class="text-2xl sm:text-3xl font-semibold text-center mb-8">How It Works</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div id="how-it-works" class="glass-card rounded-3xl p-10 sm:p-12 mb-16 animate-scale-in delay-500">
+                    <h2 class="text-3xl sm:text-4xl font-semibold text-center mb-12">How It Works</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="text-center">
-                            <div class="w-16 h-16 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mx-auto mb-4">
-                                <span class="text-primary font-bold text-xl">1</span>
+                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6">
+                                <span class="text-primary font-bold text-2xl">1</span>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Enter Your Route</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Select departure and arrival airports</p>
+                            <h3 class="text-xl font-medium mb-3">Enter Your Route</h3>
+                            <p class="text-appleGray-600 dark:text-appleGray-400">Select departure and arrival airports</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-16 h-16 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mx-auto mb-4">
-                                <span class="text-primary font-bold text-xl">2</span>
+                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6">
+                                <span class="text-primary font-bold text-2xl">2</span>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Choose Programs</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Select airline loyalty programs to compare</p>
+                            <h3 class="text-xl font-medium mb-3">Choose Programs</h3>
+                            <p class="text-appleGray-600 dark:text-appleGray-400">Select airline loyalty programs to compare</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-16 h-16 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mx-auto mb-4">
-                                <span class="text-primary font-bold text-xl">3</span>
+                            <div class="w-20 h-20 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6">
+                                <span class="text-primary font-bold text-2xl">3</span>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Get Results</h3>
-                            <p class="text-gray-600 dark:text-gray-400">See which program gives you the best rewards</p>
+                            <h3 class="text-xl font-medium mb-3">Get Results</h3>
+                            <p class="text-appleGray-600 dark:text-appleGray-400">See which program gives you the best rewards</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Final CTA -->
-                <div class="text-center">
-                    <h3 class="text-xl sm:text-2xl font-medium mb-6">Ready to optimize your travel rewards?</h3>
-                    <a href="https://airline-calculator-ak5m.onrender.com" class="inline-block bg-primary hover:bg-blue-600 text-white font-medium rounded-full px-8 py-4 text-lg transition-colors duration-300 transform hover:scale-105">
-                        Launch Calculator Now
+                <div class="text-center mb-16 animate-fade-in">
+                    <h3 class="text-2xl sm:text-3xl font-medium mb-8">Ready to optimize your travel rewards?</h3>
+                    <a href="https://airline-calculator-ak5m.onrender.com" class="inline-block bg-primary hover:bg-blue-600 text-white font-medium rounded-full px-10 py-4 text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        Launch Calculator Now <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
                     </a>
                 </div>
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="py-12 px-4 sm:px-6 lg:px-8 text-center text-gray-400 dark:text-gray-500 text-sm tracking-wide">
-            <div class="max-w-4xl mx-auto border-t border-gray-100 dark:border-gray-800 pt-8">
+        <footer class="py-12 px-4 sm:px-6 lg:px-8 text-center text-appleGray-500 dark:text-appleGray-500 text-sm tracking-wide">
+            <div class="max-w-4xl mx-auto border-t border-appleGray-200 dark:border-appleGray-800 pt-8">
                 <p>Created by George</p>
                 <p class="mt-2">© 2023 Airline Miles Calculator</p>
             </div>
         </footer>
     </div>
 
-    <!-- Theme detection script -->
+    <!-- Theme toggle and animations script -->
     <script>
-        // Check for dark mode preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // Set initial theme
+        if (localStorage.getItem('theme') === 'dark' || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
 
-        // Listen for changes in theme preference
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            if (event.matches) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+        // Parallax effect on scroll
+        document.addEventListener('scroll', () => {
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            const scrollY = window.scrollY;
+            
+            parallaxElements.forEach(element => {
+                const speed = 0.05;
+                element.style.transform = `translateY(${scrollY * speed}px)`;
+            });
         });
-    </script>
-    <script>
+
         // Intersection Observer for scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -240,7 +351,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.glass-card, .hero-gradient').forEach((el) => {
+        document.querySelectorAll('.glass-card').forEach((el) => {
             observer.observe(el);
         });
 
@@ -248,10 +359,10 @@
         document.querySelectorAll('a').forEach(link => {
             if (link.classList.contains('btn-hover')) {
                 link.addEventListener('mouseenter', () => {
-                    link.style.transform = 'translateY(-2px)';
+                    link.style.transform = 'translateY(-3px) scale(1.02)';
                 });
                 link.addEventListener('mouseleave', () => {
-                    link.style.transform = 'translateY(0)';
+                    link.style.transform = 'translateY(0) scale(1)';
                 });
             }
         });

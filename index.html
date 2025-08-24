@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airline Miles Calculator Guide</title>
   <style>
-    /* Global Styles */
+    /* Global Reset */
     * {
       margin: 0;
       padding: 0;
@@ -14,14 +14,15 @@
 
     body {
       font-family: 'Helvetica Neue', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
+      background-color: #f0f0f5;
+      color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       transition: background-color 0.3s ease;
+      overflow: hidden;
     }
 
     :root {
@@ -29,6 +30,9 @@
       --text-color: #333;
       --primary-color: #007aff;
       --hover-color: #005bb5;
+      --button-radius: 50px;
+      --blur-radius: 15px;
+      --glass-opacity: 0.15;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -40,6 +44,12 @@
       }
     }
 
+    /* Body Background */
+    body {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(var(--blur-radius));
+    }
+
     /* Header */
     header {
       text-align: center;
@@ -49,34 +59,43 @@
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      color: var(--text-color);
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       color: var(--text-color);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
     }
 
     /* Call to Action */
     .cta-container {
       text-align: center;
+      margin-top: 30px;
     }
 
     .cta-button {
-      padding: 20px 40px;
-      font-size: 1.5rem;
+      padding: 20px 50px;
+      font-size: 1.6rem;
       background-color: var(--primary-color);
       color: #fff;
       border: none;
-      border-radius: 50px;
+      border-radius: var(--button-radius);
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      text-transform: uppercase;
     }
 
     .cta-button:hover {
       background-color: var(--hover-color);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      transform: translateY(-3px);
     }
 
     /* Footer */
@@ -87,21 +106,24 @@
       color: var(--text-color);
     }
 
-    /* Glassmorphism */
-    body {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-    }
-
+    /* Glassmorphism Effect */
     header, .cta-container, footer {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, var(--glass-opacity));
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    h1, p {
-      color: inherit;
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      .cta-button {
+        font-size: 1.3rem;
+        padding: 18px 45px;
+      }
     }
   </style>
 </head>
@@ -110,6 +132,7 @@
     <h1>Airline Miles Calculator Guide</h1>
     <p>The Airline Miles Calculator helps you compare miles earned through various airlines and loyalty programs. Easily calculate miles between airports and select different loyalty programs for your preferred airlines.</p>
   </header>
+
   <main>
     <section class="cta-container">
       <button class="cta-button" onclick="window.location.href='https://airline-calculator-ak5m.onrender.com'">
@@ -117,6 +140,7 @@
       </button>
     </section>
   </main>
+
   <footer>
     <p>Created by George</p>
   </footer>
